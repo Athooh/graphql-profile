@@ -58,6 +58,51 @@ class GraphQLService {
         `;
         return this.query(query);
     }
+
+    async getAllUserData() {
+        const query = `
+            query {
+                user {
+                    id
+                    login
+                    attrs
+                }
+                transaction(where: {type: {_eq: "xp"}}, order_by: {createdAt: asc}) {
+                    amount
+                    createdAt
+                    path
+                }
+                progress {
+                    grade
+                    createdAt
+                    path
+                }
+                result(where: {type: {_eq: "up"}}, order_by: {createdAt: desc}) {
+                    grade
+                    createdAt
+                    path
+                    type
+                }
+            }
+        `;
+        return this.query(query);
+    }
+
+    async getSkills() {
+        const query = `
+            query {
+                progress {
+                    path
+                    grade
+                    object {
+                        name
+                        type
+                    }
+                }
+            }
+        `;
+        return this.query(query);
+    }
 }
 
 const graphql = new GraphQLService(); 
