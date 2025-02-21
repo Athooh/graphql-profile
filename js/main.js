@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             displayGrades(userData.progress);
             displayAudits(userData.result);
             displaySkills(skillsData.progress);
-            createAllGraphs(userData);
+            createGraphs(userData);
         } catch (error) {
             console.error('Error loading profile:', error);
             showLogin();
@@ -165,11 +165,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Create SVG graphs
-    function createAllGraphs(userData) {
+    function createGraphs(userData) {
         const graphManager = new GraphManager();
         const graph1 = document.getElementById('graph1');
         const graph2 = document.getElementById('graph2');
-        const graph3 = document.getElementById('graph3');
 
         // Create XP progress line graph
         graphManager.createLineGraph(userData.transaction, graph1);
@@ -190,8 +189,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
             graphManager.createPieChart(stats, graph2);
         });
-
-        // Create skills bar graph
-        graphManager.createSkillsBarGraph(userData.progress, graph3);
     }
 }); 
