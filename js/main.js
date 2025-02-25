@@ -73,11 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Display XP progress
     function displayXPProgress(xpData) {
         const xpProgress = document.getElementById('xpProgress');
-        const totalXP = xpData.transaction.reduce((sum, t) => sum + t.amount, 0);
+        const totalXPInBytes = xpData.transaction.reduce((sum, t) => sum + t.amount, 0);
+        // Convert KB to MB for better readability
+        const totalXPInMB = ((totalXPInBytes / 1024)/ 1024).toFixed(2);
         
         xpProgress.innerHTML = `
             <h3>XP Progress</h3>
-            <p>Total XP: ${totalXP}</p>
+            <p>Total XP: ${totalXPInMB} MB (${totalXPInBytes} Bytes)</p>
         `;
     }
 
@@ -116,8 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displaySkills(skills) {
+        console.log('Skills data:', skills);
         const skillsSection = document.getElementById('skills');
         const skillMap = new Map();
+        
+        if (!skills || skills.length === 0) {
+            skillsSection.innerHTML = '<h3>Skills Progress</h3><p>No skills data available yet</p>';
+            return;
+        }
         
         skills.forEach(skill => {
             const category = skill.path.split('/')[2]; // Get skill category
