@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create XP progress line graph
         graphManager.createLineGraph(userData.transaction, graph1);
 
-        // Calculate and create project success ratio pie chart
+        // Create project success ratio pie chart
         graphql.query(`
             query {
                 progress {

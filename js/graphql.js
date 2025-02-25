@@ -59,50 +59,51 @@ class GraphQLService {
         return this.query(query);
     }
 
-    // async getAllUserData() {
-    //     const query = `
-    //         query {
-    //             user {
-    //                 id
-    //                 login
-    //                 attrs
-    //             }
-    //             transaction(where: {type: {_eq: "xp"}}, order_by: {createdAt: asc}) {
-    //                 amount
-    //                 createdAt
-    //                 path
-    //             }
-    //             progress {
-    //                 grade
-    //                 createdAt
-    //                 path
-    //             }
-    //             result(where: {type: {_eq: "up"}}, order_by: {createdAt: desc}) {
-    //                 grade
-    //                 createdAt
-    //                 path
-    //                 type
-    //             }
-    //         }
-    //     `;
-    //     return this.query(query);
-    // }
+    async getAllUserData() {
+        const query = `
+            query {
+                user {
+                    id
+                    login
+                    attrs
+                }
+                transaction(where: {type: {_eq: "xp"}}, order_by: {createdAt: asc}) {
+                    id
+                    type
+                    amount
+                    createdAt
+                    path
+                }
+                progress {
+                    id
+                    grade
+                    createdAt
+                    path
+                }
+                result {
+                    id
+                    grade
+                    createdAt
+                    path
+                }
+            }
+        `;
+        return this.query(query);
+    }
 
-    // async getSkills() {
-    //     const query = `
-    //         query {
-    //             progress {
-    //                 path
-    //                 grade
-    //                 object {
-    //                     name
-    //                     type
-    //                 }
-    //             }
-    //         }
-    //     `;
-    //     return this.query(query);
-    // }
+    async getSkills() {
+        const query = `
+            query {
+                progress(where: {path: {_like: "%/div-%"}}) {
+                    id
+                    path
+                    grade
+                    createdAt
+                }
+            }
+        `;
+        return this.query(query);
+    }
 }
 
 const graphql = new GraphQLService(); 
