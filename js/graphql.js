@@ -41,6 +41,25 @@ class GraphQLService {
                     id
                     login
                 }
+                transaction(where: {type: {_eq: "xp"}}, order_by: {createdAt: asc}) {
+                    id
+                    type
+                    amount
+                    createdAt
+                    path
+                }
+                progress {
+                    id
+                    grade
+                    createdAt
+                    path
+                }
+                result {
+                    id
+                    grade
+                    createdAt
+                    path
+                }
             }
         `;
         return this.query(query);
@@ -53,6 +72,20 @@ class GraphQLService {
                     amount
                     createdAt
                     path
+                }
+            }
+        `;
+        return this.query(query);
+    }
+
+    async getSkills() {
+        const query = `
+            query {
+                progress(where: {path: {_like: "%/div-%"}}) {
+                    id
+                    path
+                    grade
+                    createdAt
                 }
             }
         `;
