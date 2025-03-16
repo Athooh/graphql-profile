@@ -38,14 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Fetch and display user data
             const userData = await graphql.getUserInfo();
-            const xpData = await graphql.getUserXP();
-            const skillsData = await graphql.getSkills();
-
+            
             displayUserInfo(userData);
-            displayXPProgress(xpData);
+            displayXPProgress(userData);
             displayAudits(userData.result);
-            displaySkills(skillsData.progress)
-            createGraphs(xpData);
+            displaySkills(userData);
+            createGraphs(userData);
         } catch (error) {
             console.error('Error loading profile:', error);
             showLogin();
@@ -67,6 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3>Basic Information</h3>
             <p>Login: ${userData.user[0].login}</p>
             <p>ID: ${userData.user[0].id}</p>
+            <p>Email: ${userData.user[0].email}</p>
+            <p>Campus: ${userData.user[0].campus}</p>
         `;
     }
 
@@ -93,66 +93,95 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const totalAudits = audits.length;
-        const passedAudits = audits.filter(a => a.grade > 0).length;
-        const averageGrade = audits.reduce((sum, a) => sum + a.grade, 0) / totalAudits;
+        // Filter out null grades and grades = 0, then sort by createdAt in descending order
+        const validAudits = audits.filter(audit => audit.grade !== null);
+        const passedAudits = validAudits.filter(audit => audit.grade > 0);
+        const sortedAudits = passedAudits.sort((a, b) => 
+            new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
+        const totalAudits = validAudits.length;
+        const totalPassed = passedAudits.length;
+        const averageGrade = validAudits.reduce((sum, a) => sum + a.grade, 0) / totalAudits;
         
         auditsSection.innerHTML = `
             <h3>Audit Performance</h3>
             <p>Total Audits: ${totalAudits}</p>
-            <p>Successful: ${passedAudits}</p>
-            <p>Success Rate: ${((passedAudits/totalAudits) * 100).toFixed(1)}%</p>
+            <p>Successful: ${totalPassed}</p>
+            <p>Success Rate: ${((totalPassed/totalAudits) * 100).toFixed(1)}%</p>
             <p>Average Grade: ${averageGrade.toFixed(1)}</p>
             <div class="audit-list">
-                <h4>Recent Audits:</h4>
-                ${audits.slice(0, 5).map(audit => `
-                    <div class="audit-item">
-                        <span>${audit.path}</span>
-                        <span class="grade ${audit.grade > 0 ? 'pass' : 'fail'}">
-                            ${audit.grade.toFixed(1)}
-                        </span>
-                    </div>
-                `).join('')}
+                <h4>Recent Successful Audits:</h4>
+                <div class="audit-items-container">
+                    ${sortedAudits.map(audit => `
+                        <div class="audit-item">
+                            <span>${audit.path}</span>
+                            <span class="grade pass">
+                                ${audit.grade.toFixed(1)}
+                            </span>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
         `;
     }
 
-    function displaySkills(skills) {
-        console.log('Skills data:', skills);
+    function displaySkills(userData) {
         const skillsSection = document.getElementById('skills');
-        const skillMap = new Map();
+        const skills = userData.user[0].skills;
         
         if (!skills || skills.length === 0) {
-            skillsSection.innerHTML = '<h3>Skills Progress</h3><p>No skills data available yet</p>';
+            skillsSection.innerHTML = '<h3>Skills</h3><p>No skills data available yet</p>';
             return;
         }
-        
-        skills.forEach(skill => {
-            const category = skill.path.split('/')[2]; // Get skill category
-            if (!skillMap.has(category)) {
-                skillMap.set(category, { total: 0, completed: 0 });
-            }
-            skillMap.get(category).total++;
-            if (skill.grade > 0) {
-                skillMap.get(category).completed++;
-            }
-        });
 
-        let skillsHTML = '<h3>Skills Progress</h3>';
-        skillMap.forEach((value, category) => {
-            const percentage = ((value.completed / value.total) * 100).toFixed(1);
-            skillsHTML += `
-                <div class="skill-bar">
-                    <label>${category}</label>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: ${percentage}%">
-                            ${percentage}%
+        // Group skills by category
+        const groupedSkills = skills.reduce((acc, skill) => {
+            const category = skill.type.replace('skill_', '').split('_')[0];
+            
+            if (!acc[category]) {
+                acc[category] = {
+                    amount: 0,
+                    skills: []
+                };
+            }
+            
+            acc[category].amount += skill.amount;
+            acc[category].skills.push(skill);
+            return acc;
+        }, {});
+
+        const totalAmount = Object.values(groupedSkills)
+            .reduce((sum, group) => sum + group.amount, 0);
+        
+        let skillsHTML = `
+            <h3>Skills</h3>
+            <div class="skills-wrapper">
+                <div class="skills-container">
+        `;
+
+        // Sort categories by total amount
+        Object.entries(groupedSkills)
+            .sort(([,a], [,b]) => b.amount - a.amount)
+            .forEach(([category, data]) => {
+                const percentage = ((data.amount / totalAmount) * 100).toFixed(1);
+                skillsHTML += `
+                    <div class="skill-category">
+                        <label>${category.toUpperCase()}</label>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: ${percentage}%">
+                                ${percentage}%
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
-        });
+                `;
+            });
 
+        skillsHTML += `
+                </div>
+            </div>
+        `;
+        
         skillsSection.innerHTML = skillsHTML;
     }
 
@@ -163,7 +192,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const graph2 = document.getElementById('graph2');
 
         // Create XP progress line graph
-        graphManager.createLineGraph(xpData.transaction, graph1);
+        if (xpData && xpData.transaction && xpData.transaction.length > 0) {
+            graphManager.createLineGraph(xpData.transaction, graph1);
+        }
 
         // Calculate and create project success ratio pie chart
         graphql.query(`
