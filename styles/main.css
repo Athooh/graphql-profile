@@ -194,7 +194,7 @@ path:hover {
 .skills-container {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 5px;
     padding-right: 10px;
     overflow-y: auto;
     max-height: 380px;
@@ -204,7 +204,7 @@ path:hover {
     background: #f8f9fa;
     padding: 15px;
     border-radius: 8px;
-    margin-bottom: 10px;
+    display: flex;
 }
 
 .skill-category:last-child {
@@ -217,6 +217,7 @@ path:hover {
     color: #343a40;
     margin-bottom: 10px;
     display: block;
+    width: 20%;
 }
 
 .skill-details-wrapper {
