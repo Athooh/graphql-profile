@@ -57,9 +57,82 @@ class GraphManager {
         yAxis.setAttribute("y2", height - padding);
         yAxis.setAttribute("stroke", "black");
 
+        // Add grid lines
+        const gridLines = document.createElementNS(this.svgNS, "g");
+        gridLines.setAttribute("class", "grid-lines");
+        
+        // Vertical grid lines
+        for (let i = 0; i <= 5; i++) {
+            const x = padding + (width - 2 * padding) * (i / 5);
+            const line = document.createElementNS(this.svgNS, "line");
+            line.setAttribute("x1", x);
+            line.setAttribute("y1", padding);
+            line.setAttribute("x2", x);
+            line.setAttribute("y2", height - padding);
+            line.setAttribute("stroke", "#e0e0e0");
+            line.setAttribute("stroke-width", "1");
+            gridLines.appendChild(line);
+            
+            // Add date labels
+            if (points.length > 0) {
+                const dateLabel = document.createElementNS(this.svgNS, "text");
+                const pointIndex = Math.min(Math.floor(i * points.length / 5), points.length - 1);
+                const date = points[pointIndex].date;
+                dateLabel.textContent = date.toLocaleDateString();
+                dateLabel.setAttribute("x", x);
+                dateLabel.setAttribute("y", height - padding + 20);
+                dateLabel.setAttribute("text-anchor", "middle");
+                dateLabel.setAttribute("font-size", "12px");
+                svg.appendChild(dateLabel);
+            }
+        }
+
+        // Horizontal grid lines and XP labels
+        const maxXP = Math.max(...points.map(p => p.xp));
+        for (let i = 0; i <= 5; i++) {
+            const y = height - padding - (height - 2 * padding) * (i / 5);
+            const line = document.createElementNS(this.svgNS, "line");
+            line.setAttribute("x1", padding);
+            line.setAttribute("y1", y);
+            line.setAttribute("x2", width - padding);
+            line.setAttribute("y2", y);
+            line.setAttribute("stroke", "#e0e0e0");
+            line.setAttribute("stroke-width", "1");
+            gridLines.appendChild(line);
+            
+            // Add XP labels
+            const xpLabel = document.createElementNS(this.svgNS, "text");
+            xpLabel.textContent = Math.round(maxXP * i / 5).toLocaleString() + " XP";
+            xpLabel.setAttribute("x", padding - 10);
+            xpLabel.setAttribute("y", y);
+            xpLabel.setAttribute("text-anchor", "end");
+            xpLabel.setAttribute("alignment-baseline", "middle");
+            xpLabel.setAttribute("font-size", "12px");
+            svg.appendChild(xpLabel);
+        }
+
+        // Add axis labels
+        const xLabel = document.createElementNS(this.svgNS, "text");
+        xLabel.textContent = "Time";
+        xLabel.setAttribute("x", width / 2);
+        xLabel.setAttribute("y", height - 5);
+        xLabel.setAttribute("text-anchor", "middle");
+        xLabel.setAttribute("font-size", "14px");
+
+        const yLabel = document.createElementNS(this.svgNS, "text");
+        yLabel.textContent = "XP Gained";
+        yLabel.setAttribute("x", -height / 2);
+        yLabel.setAttribute("y", 15);
+        yLabel.setAttribute("text-anchor", "middle");
+        yLabel.setAttribute("transform", "rotate(-90)");
+        yLabel.setAttribute("font-size", "14px");
+
         svg.appendChild(path);
         svg.appendChild(xAxis);
         svg.appendChild(yAxis);
+        svg.insertBefore(gridLines, path);
+        svg.appendChild(xLabel);
+        svg.appendChild(yLabel);
 
         // Add title
         const title = document.createElement("h3");
