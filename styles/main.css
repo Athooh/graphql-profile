@@ -106,11 +106,42 @@ path:hover {
     margin-top: 15px;
 }
 
+.audit-items-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 10px;
+}
+
 .audit-item {
     display: flex;
     justify-content: space-between;
-    padding: 5px 0;
+    padding: 8px 5px;
     border-bottom: 1px solid #eee;
+}
+
+.audit-item:last-child {
+    border-bottom: none;
+}
+
+/* Scrollbar styling */
+.audit-items-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.audit-items-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.audit-items-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.audit-items-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .grade {
@@ -126,10 +157,11 @@ path:hover {
 }
 
 .skill-bar {
-    margin: 15px 0;
+    margin-bottom: 10px;
 }
 
 .skill-bar label {
+    text-transform: capitalize;
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
@@ -138,7 +170,7 @@ path:hover {
 .progress {
     width: 100%;
     height: 20px;
-    background-color: #f0f0f0;
+    background-color: #e9ecef;
     border-radius: 4px;
     overflow: hidden;
 }
@@ -149,5 +181,125 @@ path:hover {
     color: white;
     text-align: center;
     line-height: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
     transition: width 0.3s ease;
-} 
+}
+
+.skills-wrapper {
+    max-height: 400px;
+    overflow: hidden;
+}
+
+.skills-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-right: 10px;
+    overflow-y: auto;
+    max-height: 380px;
+}
+
+.skill-category {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.skill-category:last-child {
+    margin-bottom: 0;
+}
+
+.skill-category label {
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #343a40;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.skill-details-wrapper {
+    max-height: 200px;
+    overflow: hidden;
+}
+
+.skill-details {
+    margin-top: 10px;
+    padding-left: 15px;
+    max-height: 180px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Limit the number of visible sub-skills */
+.sub-skill {
+    margin: 8px 0;
+}
+
+.sub-skill:nth-child(n+7) {
+    display: block;
+}
+
+/* Scrollbar styling */
+.skill-details::-webkit-scrollbar {
+    width: 8px;
+}
+
+.skill-details::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.skill-details::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.skill-details::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.sub-skill span {
+    display: block;
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 3px;
+    text-transform: capitalize;
+}
+
+.sub-progress {
+    height: 15px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.sub-progress-bar {
+    height: 100%;
+    background-color: #6c757d;
+    color: white;
+    text-align: center;
+    line-height: 15px;
+    font-size: 0.8em;
+    transition: width 0.3s ease;
+}
+
+/* Scrollbar styling */
+.skills-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.skills-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.skills-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.skills-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
