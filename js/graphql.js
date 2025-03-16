@@ -40,10 +40,18 @@ class GraphQLService {
                 user {
                     id
                     login
+                    email
+                    campus
+                    auditRatio
+                    skills: transactions(
+                        where: { type: { _like: "skill_%" } }
+                        order_by: [{ amount: desc }]
+                    ) {
+                        type
+                        amount
+                    }
                 }
                 transaction(where: {type: {_eq: "xp"}}, order_by: {createdAt: asc}) {
-                    id
-                    type
                     amount
                     createdAt
                     path
