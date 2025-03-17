@@ -159,29 +159,31 @@ document.addEventListener("DOMContentLoaded", () => {
       validAudits.reduce((sum, a) => sum + a.grade, 0) / totalAudits;
 
     auditsSection.innerHTML = `
-            <h3>Audit Performance</h3>
-            <p>Total Audits: ${totalAudits}</p>
-            <p>Successful: ${totalPassed}</p>
-            <p>Success Rate: ${((totalPassed / totalAudits) * 100).toFixed(
-              1
-            )}%</p>
-            <p>Average Grade: ${averageGrade.toFixed(1)}</p>
-            <div class="audit-list">
-                <h4>Recent Successful Audits:</h4>
-                <div class="audit-items-container">
-                    ${sortedAudits
-                      .map(
-                        (audit) => `
-                        <div class="audit-item">
-                            <span>${audit.path}</span>
-                            <span class="grade pass">
-                                ${audit.grade.toFixed(1)}
-                            </span>
-                        </div>
-                    `
-                      )
-                      .join("")}
-                </div>
+            <h3>Audit Performance</h3>  
+            <div class="audit-performance-card">
+              <div class="audit-performance-card-content">
+                <p>Total Audits: ${totalAudits}</p>
+                <p>Successful: ${totalPassed}</p>
+                <p>Success Rate: ${((totalPassed / totalAudits) * 100).toFixed(1)}%</p>
+                <p>Average Grade: ${averageGrade.toFixed(1)}</p>
+              </div>
+              <div class="audit-list">
+                  <h4>Recent Successful Audits:</h4>
+                  <div class="audit-items-container">
+                      ${sortedAudits
+                        .map(
+                          (audit) => `
+                          <div class="audit-item">
+                              <span>${audit.path}</span>
+                              <span class="grade pass">
+                                  ${audit.grade.toFixed(1)}
+                              </span>
+                          </div>
+                      `
+                        )
+                        .join("")}
+                  </div>
+              </div>
             </div>
         `;
   }
