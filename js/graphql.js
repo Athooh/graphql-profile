@@ -26,6 +26,7 @@ class GraphQLService {
                 throw new Error(data.errors[0].message);
             }
 
+            console.log(data)
             return data.data;
         } catch (error) {
             console.error('GraphQL Error:', error);
@@ -51,10 +52,11 @@ class GraphQLService {
                         amount
                     }
                 }
-                transaction(where: {type: {_eq: "xp"}}, order_by: {createdAt: asc}) {
+                transaction(where: {_and: [{eventId:{_eq: 75}},]}, order_by: {createdAt: desc}) {
                     amount
                     createdAt
                     path
+                    type
                 }
                 progress {
                     id
@@ -76,7 +78,7 @@ class GraphQLService {
     async getUserXP() {
         const query = `
             query {
-                transaction(where: {type: {_eq: "xp"}}) {
+                transaction(where: {_and: [{eventId:{_eq: 75}},{type:{_eq: "xp"}}]}, order_by: {createdAt: desc}) {
                     amount
                     createdAt
                     path

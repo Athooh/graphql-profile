@@ -129,7 +129,7 @@ You can host this project on any static hosting service. Here are some options:
    - Push your code to a GitHub repository and enable GitHub Pages in the repository settings.
 
 2. **Netlify**:
-   - Use [Netlify](https://www.netlify.com/) for easy deployment and hosting.
+   - Use [Vercel](https://vercel.com/athoohs-projects/graphql) for easy deployment and hosting.
    - Drag and drop your project folder into Netlify, or connect your GitHub repository.
 
 ---
@@ -154,6 +154,10 @@ You can host this project on any static hosting service. Here are some options:
 
 ---
 
+## Hosting
+check out the graphql web app here: https://vercel.com/athoohs-projects/graphql
+
+---
 ## Conclusion
 
 This project demonstrates how to integrate GraphQL with a frontend application to create a dynamic and interactive profile page. It includes authentication, data fetching, and data visualization using SVG graphs. The project is a great example of how to build a modern web application using GraphQL and JavaScript.
