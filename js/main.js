@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Calculate done/received ratio
     const doneRatio = totalXPInBytes ? (totalXPreceived/1000/1000).toFixed(1) : "0.0";
     const receivedRatio = totalXgiven ? (totalXgiven/1000/1000).toFixed(1) : "0.0";
+    const totalRatio = (doneRatio/receivedRatio).toFixed(1) ? (doneRatio/receivedRatio).toFixed(1) : "0.0";
 
     basicInfo.innerHTML = `
             <h3>Basic Information</h3>
@@ -105,6 +106,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         <div class="ratio-box">
                             <span class="ratio-value">${receivedRatio}</span>
                             <span class="ratio-label">Received</span>
+                        </div>
+                         <div class="ratio-divider">:</div>
+                        <div class="ratio-box">
+                            <span class="ratio-value">${totalRatio}</span>
+                            <span class="ratio-label">Ratio</span>
                         </div>
                     </div>
                 </div>
