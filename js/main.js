@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
             loginContainer.classList.add('hidden');
             profileContainer.classList.remove('hidden');
 
+            document.querySelector('header').classList.remove('hidden');
+
             // Fetch and display user data
             const userData = await graphql.getUserInfo();
             
@@ -54,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function showLogin() {
         loginContainer.classList.remove('hidden');
         profileContainer.classList.add('hidden');
+        document.querySelector('header').classList.add('hidden');
         loginForm.reset();
         errorMessage.textContent = '';
     }
@@ -69,23 +72,25 @@ document.addEventListener('DOMContentLoaded', () => {
         
         basicInfo.innerHTML = `
             <h3>Basic Information</h3>
-            <div class="user-info">
-                <p><strong>Login:</strong> ${userData.user[0].login}</p>
-                <p><strong>ID:</strong> ${userData.user[0].id}</p>
-                <p><strong>Email:</strong> ${userData.user[0].email}</p>
-                <p><strong>Campus:</strong> ${userData.user[0].campus}</p>
-            </div>
-            <div class="audit-ratio-section">
-                <h4>Audit Ratio</h4>
-                <div class="ratio-container">
-                    <div class="ratio-box">
-                        <span class="ratio-value">${doneRatio}</span>
-                        <span class="ratio-label">Done</span>
-                    </div>
-                    <div class="ratio-divider">:</div>
-                    <div class="ratio-box">
-                        <span class="ratio-value">${receivedRatio}</span>
-                        <span class="ratio-label">Received</span>
+            <div class="basic-info">
+                <div class="user-info">
+                    <p><strong>Login:</strong> ${userData.user[0].login}</p>
+                    <p><strong>ID:</strong> ${userData.user[0].id}</p>
+                    <p><strong>Email:</strong> ${userData.user[0].email}</p>
+                    <p><strong>Campus:</strong> ${userData.user[0].campus}</p>
+                </div>
+                <div class="audit-ratio-section">
+                    <h4>Audit Ratio</h4>
+                    <div class="ratio-container">
+                        <div class="ratio-box">
+                            <span class="ratio-value">${doneRatio}</span>
+                            <span class="ratio-label">Done</span>
+                        </div>
+                        <div class="ratio-divider">:</div>
+                        <div class="ratio-box">
+                            <span class="ratio-value">${receivedRatio}</span>
+                            <span class="ratio-label">Received</span>
+                        </div>
                     </div>
                 </div>
             </div>
